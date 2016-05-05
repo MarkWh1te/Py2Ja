@@ -1,0 +1,62 @@
+.main {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.main .container {
+    background-image: url("/static/images/program/bg.jpg");
+    height: 560px;
+}
+
+.main .editor {
+    margin: 0;
+    padding: 0;
+}
+
+.main select {
+    font-size: 17px;
+    font-family: "Time New Roman";
+}
+
+.main .controls {
+    padding-top: 10px;
+    padding-left: 20px;
+}
+
+.main .controls label {
+    padding: 0 20px;
+}
+
+
+.main .tag {
+    padding: 20px 0;
+    text-align: center;
+}
+
+.main .tag .glyphicon {
+    font-size: 25px;
+}
+
+.code-area {
+    padding: 40px 20px;
+    width: 780px;
+    height: 342px;
+    border: 2px solid #000000;
+    border-radius: 15px;
+    font-size: 20px;
+    font-family: "Time New Roman";
+}
+
+.result-area{
+    padding: 5px 20px;
+    width: 780px;
+    height: 110px;
+    border: 2px solid #000000;
+    border-radius: 15px;
+    background-color: #000000;
+    opacity: 0.9;
+    color: #227700;
+    font-size: 20px;
+    font-family: "Time New Roman";
+}

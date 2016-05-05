@@ -1,0 +1,12 @@
+<div class="container blog-section">
+    <div class="col-md-1 col-sm-1 col-xs-1">
+        <ul class="alert-success" style="text-align: center;"><li>{{ blog.rank }}</li><li>推荐</li></ul>
+        <ul class="alert-warning" style="text-align: center;"><li>{{ blog.trace }}</li><li>浏览</li></ul>
+    </div>
+    <div class="col-md-7 col-sm-7 col-xs-7">
+        <div class="title"><a href="/blog/view/{{ blog.id }}">{{ blog.title }}</a></div>
+        <div class="brief"><p>{{ blog.brief }}</p></div>
+        <div class="author"><img src="/media/cropped_avatars/{{ blog.author }}-40.jpeg" />
+            &nbsp;&nbsp;&nbsp;&nbsp;{{ blog.author }}发表于{{ blog.create_timestamp }}</div>
+    </div>
+</div>

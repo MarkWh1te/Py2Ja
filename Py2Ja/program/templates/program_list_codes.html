@@ -1,0 +1,93 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+
+{% block tilte %}
+Py2Ja
+{% endblock %}
+
+{% block extracss %}
+<link href="{% static 'css/program_list_codes.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block login %}
+{% if request.user.is_authenticated %}
+<a>{{ request.user.username }}</a>
+<a href="/user/home/{{ request.user.username }}">|  <span class="glyphicon glyphicon-home"></span> </a>
+<a href="javascript:void(0)" class="user-logout">|  logout</a>
+{% else %}
+{{ block.super }}
+{% endif %}
+{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1 col-sm-1 col-xs-1">
+            </div>
+            <div class="col-md-7 col-sm-7 col-xs-7">
+                <div class='tabs tabs_active'>
+                    <ul class='horizontal'>
+                        <li><a href="#tab-1" class="show-change">C++</a></li>
+                        <li><a href="#tab-2" class="show-change">Java</a></li>
+                        <li><a href="#tab-3" class="show-change">Python</a></li>
+                        <li><a href="#tab-4" class="show-change">PHP</a></li>
+                        <li><a href="#tab-5" class="show-change">JavaScript</a></li>
+                        <li><a href="#tab-6" class="show-change">SQL</a></li>
+                    </ul>
+                    <div class="tab-content" id='tab-1'>
+                        {% for snippet in cpp_snippets %}
+                            {% include "program_list_codes_section.html" %}
+                        {% endfor %}
+                    </div>
+                    <div class="tab-content" id='tab-2'>
+                        {% for snippet in java_snippets %}
+                            {% include "program_list_codes_section.html" %}
+                        {% endfor %}
+                    </div>
+                    <div class="tab-content" id='tab-3'>
+                        {% for snippet in python_snippets %}
+                            {% include "program_list_codes_section.html" %}
+                        {% endfor %}
+                    </div>
+                    <div class="tab-content" id='tab-4'>
+                        {% for snippet in php_snippets %}
+                            {% include "program_list_codes_section.html" %}
+                        {% endfor %}
+                    </div>
+                    <div class="tab-content" id='tab-5'>
+                        {% for snippet in javascript_snippets %}
+                            {% include "program_list_codes_section.html" %}
+                        {% endfor %}
+                    </div>
+                    <div class="tab-content" id='tab-6'>
+                        {% for snippet in sql_snippets %}
+                            {% include "program_list_codes_section.html" %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-4" style="padding-top: 30px;">
+                <a href="/program/code/write"><button class="btn btn-success push">贡献代码</button></a>
+                {% include "program_list_codes_rank.html" %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script_files %}
+<script src="/static/jquery/jquery.tabslet.min.js"></script>
+<script src="/static/javascript/user_login.js"></script>
+<script src="/static/jquery/jquery.bpopup.min.js"></script>
+{% endblock %}
+
+{% block script %}
+    $(document).ready(function(){
+        $(function(){
+            $('.tabs').tabslet({
+                mouseevent: 'hover'
+            });
+        });
+    });
+{% endblock %}

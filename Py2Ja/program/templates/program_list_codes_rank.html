@@ -1,0 +1,13 @@
+<section id="ranking">
+    <section id="ranking_title">代码贡献榜</section>
+    <section id="ranking_list">
+        {% for hacker_star in hacker_stars %}
+        <div class="container box">
+            <div class="col-md-1 col-sm-1 col-xs-1 gpa-1">{{ forloop.counter }}</div>
+            <div class="col-md-1 col-sm-1 col-xs-1 gpa-2"><img src="/media/cropped_avatars/{{ hacker_star.hacker.username }}-40.jpeg" /></div>
+            <div class="col-md-1 col-sm-1 col-xs-1 gpa-3">{{ hacker_star.hacker.username }}</div>
+            <div class="col-md-1 col-sm-1 col-xs-1 gpa-4">{{ hacker_star.commit_code }}</div>
+        </div>
+        {% endfor %}
+    </section>
+</section>

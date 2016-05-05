@@ -1,0 +1,24 @@
+.panel-heading {
+    background-color: #f1941c;
+    opacity: 0.75;
+    color: #ffffff;
+}
+
+.panel-heading .panel-title {
+    text-align: center;
+    font-family: "Time New Roman";
+}
+
+.panel-body .controls {
+    padding-top: 10px;
+    padding-left: 330px;
+}
+
+.panel-body .controls label {
+    padding-right: 20px;
+}
+
+.panel-body .button-controls {
+    padding-top: 10px;
+    padding-left: 430px;
+}

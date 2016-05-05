@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="shortcut icon" href="/static/icon/16x16.ico" />
+    {% block extracss %}{% endblock %}
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/css/base.css" />
+    <link rel="stylesheet" href="/static/css/pgwmenu_custom.css" />
+    <link rel="stylesheet" href="/static/alert/css/alert.css" />
+    <link rel="stylesheet" href="/static/css/jquery-confirm.css" />
+
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script src="//cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
+    <script src="/static/jquery/jquery.pgwmenu.min.js"></script>
+    <script src="/static/alert/js/alert.js"></script>
+    <script src="/static/jquery/jquery-confirm.js"></script>
+</head>
+<body>
+    {% include "base/include/header.html" %}
+    <div class="header">
+        <div class="container">
+            <div class="row">
+                <div class="top">
+                    <div class="col-md-9 col-sm-9 col-xs-9">
+                        <!--<form method="get" action=""  target="_blank">{% csrf_token %}-->
+                            <!--<input class="search_box" type="text" placeholder="Search..." size="20" />-->
+                            <!--<button class="search_button btn" type="submit"><span class="glyphicon glyphicon-search"></span></button>-->
+                        <!--</form>-->
+                        <h2 style="color: #ffffff;">Py2Ja.COM</h2>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3 user">
+                        {% block login %}
+                        <a href="javascript:void(0)" class="user-login">Login  |</a>
+                        <a href="/user/register">Register</a>
+                        {% endblock %}
+                    </div>
+                </div>
+                <ul class="pgwMenuCustom">
+                    <li><a href="/blog/list">博客文章</a></li>
+                    <li><a href="/program/code/list">代码达人</a></li>
+                    <li><a href="/knowledge/books/view">学海无涯</a></li>
+                    <li><a href="">泡在GitHub的这些年</a></li>
+                    <li><a href="">LeetCode的那些事</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% block main %}{% endblock %}
+    {% include "base/login.html" %}
+    {% include "base/include/footer.html" %}
+</body>
+{% block script_files %}{% endblock %}
+<script>
+{% block script %}{% endblock %}
+</script>
+</html>

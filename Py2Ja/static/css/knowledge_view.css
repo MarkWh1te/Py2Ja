@@ -1,0 +1,29 @@
+.main {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 1030px;
+}
+
+.main .container {
+    background-color: #cccccc;
+    margin: 10px auto;
+}
+
+.main .tag {
+    padding: 20px 0;
+    text-align: center;
+}
+
+.main .tag:hover {
+    background-color: #ffffff;
+}
+
+.main .tag a {
+    text-decoration: none;
+    color: #000000;
+}
+
+.main .tag .glyphicon {
+    font-size: 25px;
+}

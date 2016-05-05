@@ -1,0 +1,173 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+
+{% block tilte %}
+Py2Ja
+{% endblock %}
+
+{% block extracss %}
+<link href="{% static 'css/user_register.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block login %}
+{% if request.user.is_authenticated %}
+<a>{{ request.user.username }}</a>
+<a href="/user/home/{{ request.user.username }}">|  <span class="glyphicon glyphicon-home"></span> </a>
+<a href="javascript:void(0)" class="user-logout">|  logout</a>
+{% else %}
+<a href="javascript:void(0)" class="user-login">Login</a>
+{% endif %}
+{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1 col-sm-1 col-xs-1">
+            </div>
+            <div class="col-md-10 col-sm-10 col-xs-10">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Hacker注册
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <form id="register-form" method="post" action="" class="form-horizontal">{% csrf_token %}
+                        <div class="control-group">
+                            <div class="controls">
+                                <label class="control-label">输入姓名</label>
+                                <span class="glyphicon glyphicon-bookmark"></span>
+                                &nbsp;&nbsp;
+                                <input class="Name" name="inputUsername" type="text" autofocus/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="controls">
+                                <label class="control-label">输入邮箱</label>
+                                <span class="glyphicon glyphicon-envelope"></span>
+                                &nbsp;&nbsp;
+                                <input class="Email" name="inputEmail" type="text" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="controls">
+                                <label class="control-label">输入密码</label>
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                                &nbsp;&nbsp;
+                                <input class="Password" name="inputPassword" type="password" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="controls">
+                                <label class="control-label">密码确认</label>
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                                &nbsp;&nbsp;
+                                <input class="Repassword" name="inputRePassword" type="password" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="controls">
+                                <label class="control-label">输入性别</label>
+                                <span class="glyphicon glyphicon-user"></span>
+                                &nbsp;&nbsp;
+                                <input class="Sex" name="inputSex" type="radio" value="Male" /> Male
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input class="Sex" name="inputSex" type="radio" value="Female" /> Female
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="controls">
+                                <label class="control-label">输入年龄</label>
+                                <span class="glyphicon glyphicon-tree-conifer"></span>
+                                &nbsp;&nbsp;
+                                <input class="Age" name="inputAge" type="text" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="button-controls">
+                                <button class="btn btn-success reset-button">重置</button>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button type="submit" class="btn btn-success register-button">注册</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        To Be A Hacker
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-1 col-sm-1 col-xs-1">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script_files %}
+<script src="/static/jquery/jquery.form.js"></script>
+<script src="/static/javascript/user_login.js"></script>
+<script src="/static/jquery/jquery.bpopup.min.js"></script>
+{% endblock %}
+
+{% block script %}
+$(document).ready(function(){
+    $(".reset-button").click(function(){
+        $('#register-form').resetForm();
+    });
+    $(".register-button").click(function(){
+        function trim(str){
+            return str.replace(/(^\s*)|(\s*$)/g, "");
+        }
+        var Name = $(".Name").val();
+        var Email = $(".Email").val();
+        var Password = $(".Password").val();
+        var Repassword = $(".Repassword").val();
+        var Sex = $(".Sex").val();
+        var Age = $(".Age").val();
+        if (trim(Name) == "" || trim(Email)== "" || trim(Password) == "" ||
+            trim(Repassword) == "" || trim(Sex)== "" || trim(Age) == "") {
+            $.dialog({
+                title: '用户操作',
+                content: '输入不能为空！',
+            });
+        }
+
+        else {
+            // 检验姓名和邮箱是否已被使用，编写函数
+
+            var isEmail = function(str){
+                var pattern = /^([a-zA-Z0-9_])+@([a-zA-Z0-9])+((\.[a-zA-Z0-9]{2,3}){1,2})$/;
+                return pattern.test(str);
+            }
+
+            if (!isEmail(Email)){
+                $.dialog({
+                    title: '用户操作',
+                    content: '您输入的邮箱格式不正确!',
+                });
+            }
+
+            else if (Password !== Repassword){
+                $.dialog({
+                    title: '用户操作',
+                    content: '您两次输入的密码不一致!',
+                });
+            }
+
+            else {
+                $('#register-form').ajaxForm(function(){
+                    $.dialog({
+                        title: '用户操作',
+                        content: 'Thank you for your register!',
+                    });
+                });
+                setTimeout(function (){
+                    $('#register-form').clearForm();
+                }, 100);
+            }
+        }
+    });
+});
+{% endblock %}

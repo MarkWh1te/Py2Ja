@@ -1,0 +1,79 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+
+{% block tilte %}
+Py2Ja
+{% endblock %}
+
+{% block extracss %}
+<link href="{% static 'css/blog_list.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block login %}
+{% if request.user.is_authenticated %}
+<a>{{ request.user.username }}</a>
+<a href="/user/home/{{ request.user.username }}">|  <span class="glyphicon glyphicon-home"></span> </a>
+<a href="javascript:void(0)" class="user-logout">|  logout</a>
+{% else %}
+{{ block.super }}
+{% endif %}
+{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1 col-sm-1 col-xs-1">
+            </div>
+            <div class="col-md-10 col-sm-10 col-xs-10 blog-block">
+                {% for blog in blogs %}
+                    {% include "blog_list_section.html" %}
+                    <hr style="width: 700px;">
+                {% endfor %}
+                <div class="row" style="padding-left: 140px;">
+                    <button class="btn btn-success load">加载更多</button>
+                    <a href="/blog/write" style="padding-left: 440px;"><button class="btn btn-success">发布文章</button></a>
+                </div>
+            </div>
+            <div class="col-md-1 col-sm-1 col-xs-1">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script_files %}
+<script src="/static/javascript/user_login.js"></script>
+<script src="/static/jquery/jquery.bpopup.min.js"></script>
+{% endblock %}
+
+{% block script %}
+    $(document).ready(function(){
+        $(".load").click(function(){
+            last_blog_id = $(".blog-section:last a").attr("href");
+            $.ajax({
+		        url : '/blog/list',
+                type : "GET",
+		        dataType : "json",
+		        data : {last_blog_id: last_blog_id},
+
+                success: function(data){
+                    if (data["Flag"] == "true"){
+                        $(".blog-section:last").after(data["DOM"]);
+                        $(".load").attr("disabled", "disabled");
+                    }
+                    else{
+                        $(".blog-section:last").after(data["DOM"]);
+                    }
+                },
+
+                complete: function(){
+                },
+
+                error: function(){
+                    alert("Error Happened While Running the Code...");
+                },
+		    });
+        });
+    });
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+
+{% block tilte %}
+Py2Ja
+{% endblock %}
+
+{% block extracss %}
+<link href="{% static 'css/user_home.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block login %}
+{% if request.user.is_authenticated %}
+<a>{{ request.user.username }}</a>
+<a href="/user/home/{{ request.user.username }}">|  <span class="glyphicon glyphicon-home"></span> </a>
+<a href="javascript:void(0)" class="user-logout">|  logout</a>
+{% else %}
+{{ block.super }}
+{% endif %}
+{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1 col-sm-1 col-xs-1">
+            </div>
+            <div class="col-md-10 col-sm-10 col-xs-10">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-2 col-sm-2 col-xs-2">
+                            <div class="head-portrait">
+                                <img src="/media/cropped_avatars/{{ request.user.username }}-120.jpeg" />
+                            </div>
+                            <div class="change-head-portrait">
+                                <a href="/user/upload-head-portrait">修改用户头像</a>
+                            </div>
+                        </div>
+                        <div class="col-md-10 col-sm-10 col-xs-10">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            {% for collected_blog in collected_blogs %}
+                            <div>
+                                {{ collected_blog.title }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            {% for collected_codesnippt in collected_codesnippts %}
+                            <div>
+                                {{ collected_codesnippt.type }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1 col-sm-1 col-xs-1">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script_files %}
+{% endblock %}
+
+{% block script %}
+    $(document).ready(function(){
+    });
+{% endblock %}

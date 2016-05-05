@@ -1,0 +1,80 @@
+.main {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.code-like {
+    margin: 0;
+    padding-top: 100px;
+    text-align: center;
+}
+
+.code-like h4 {
+    padding: 38px 0;
+    border-top: 1px solid #cccccc;
+}
+
+.code-info {
+    margin: 0;
+    padding: 0;
+}
+
+.code-info ul {
+    margin: 0;
+    padding: 0;
+    height: 50px;
+    list-style: none;
+    border-bottom: 1px solid #f19000;
+}
+
+.code-info ul li {
+    display: inline-block;
+    padding-right: 30px;
+    float: left;
+    text-align: center;
+    line-height: 50px;
+    font-size: 17px;
+    font-family: "Time New Roman"
+}
+
+.code-description {
+    margin: 0;
+    padding: 0;
+    height: 50px;
+}
+
+.code-description h4 {
+    margin: 0;
+    padding: 0;
+    line-height: 50px;
+    font-size: 15px;
+    font-family: "Time New Roman"
+}
+
+pre {
+    position: relative;
+}
+
+code {
+    display: block;
+}
+
+code.has-numbering {
+    margin-left: 20px;
+}
+
+.pre-numbering {
+    position: absolute;
+    top: 5px;
+    left: 0;
+    width: 30px;
+    padding: 12px 6px 12px 0;
+    border-right: 1px solid #C3CCD0;
+    border-radius: 2px 0 0 2px;
+    background-color: #EEE;
+    text-align: right;
+    font-family: Menlo, monospace;
+    font-size: 1.0em;
+    color: #AAA;
+}

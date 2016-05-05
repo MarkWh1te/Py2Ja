@@ -1,0 +1,161 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+
+{% block tilte %}
+Py2Ja
+{% endblock %}
+
+{% block extracss %}
+<link href="{% static 'css/program_view_code.css' %}" rel="stylesheet">
+<link href="{% static 'ckeditor/plugins/codesnippet/lib/highlight/styles/monokai.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block login %}
+{% if request.user.is_authenticated %}
+<a>{{ request.user.username }}</a>
+<a href="/user/home/{{ request.user.username }}">|  <span class="glyphicon glyphicon-home"></span> </a>
+<a href="javascript:void(0)" class="user-logout">|  logout</a>
+{% else %}
+{{ block.super }}
+{% endif %}
+{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1 col-sm-1 col-xs-1">
+                <div class="code-like">
+                    <h4>支持</h4>
+                    <h4 style="font-size: 28px; color: #008800;" class="rank-area">{{ snippet.rank }}</h4>
+                    <div style="padding-bottom: 50px;"><button class="btn btn-success rank">点赞</button></div>
+                </div>
+            </div>
+            <div class="col-md-10 col-sm-10 col-xs-10">
+                <div class="code-info">
+                    <ul>
+                        <li><span class="glyphicon glyphicon-leaf"></span>
+                            &nbsp;{{ snippet.type }}</li>
+                        <li><span class="glyphicon glyphicon-user"></span>
+                            &nbsp;{{ snippet.coder }}</li>
+                        <li><span class="glyphicon glyphicon-calendar"></span>
+                            &nbsp;{{ snippet.create_timestamp }}</li>
+                    </ul>
+                </div>
+                <div class="code-description">
+                    <h4>功能描述：{{ snippet.description }}</h4>
+                </div>
+                <div class="code-snippet">
+                    {% autoescape off %}
+                    <pre><code>{{ snippet.snippet | escape }}</code></pre>
+                    {% endautoescape %}
+                </div>
+            </div>
+            <div class="col-md-1 col-sm-1 col-xs-1">
+                <div class="code-like">
+                    <h4>关注</h4>
+                    <h4 style="font-size: 28px; color: #008800;" class="collect-area">{{ snippet.collect }}</h4>
+                    {% if flag == "true" %}
+                    <div style="padding-bottom: 20px;"><button class="btn btn-danger collect">取消</button></div>
+                    {% else %}
+                    <div style="padding-bottom: 20px;"><button class="btn btn-success collect">收藏</button></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script_files %}
+<script src="/static/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+{% endblock %}
+
+{% block script %}
+    $(document).ready(function(){
+        hljs.initHighlightingOnLoad();
+
+        $(function(){
+            $('pre code').each(function(){
+                var lines = $(this).text().split('\n').length;
+                var $numbering = $('<ul/>').addClass('pre-numbering');
+                $(this)
+                    .addClass('has-numbering')
+                    .parent()
+                    .append($numbering);
+                for(i=1;i<=lines;i++){
+                    $numbering.append($('<li/>').text(i));
+                }
+            });
+        });
+
+        $(".rank").click(function(){
+            id = {{ snippet.id }};
+            $.ajax({
+		        url : '/program/code/view/'+id,
+                type : "GET",
+		        dataType : "text",
+		        data : {id: id, type: 1},
+
+                success: function(data){
+                    $(".rank-area").html(data);
+                },
+
+                complete: function(){
+                },
+
+                error: function(){
+                    alert("Error Happened While Running the Code...");
+                },
+		    });
+        });
+
+        $(".collect").click(function(){
+            id = {{ snippet.id }};
+            if ({{ flag }} == true){
+                $(this).attr("class", "btn btn-success focus");
+                $(this).html("收藏");
+                $.ajax({
+                    url : '/program/code/view/'+id,
+                    type : "GET",
+                    dataType : "text",
+                    data : {id: id, type: 2},
+
+                    success: function(data){
+                        $(".collect-area").html(data);
+                         <!--TODO:-->
+                    },
+
+                    complete: function(){
+                    },
+
+                    error: function(){
+                        alert("Error Happened While Running the Code...");
+                    },
+                });
+            }
+            else {
+                $(this).attr("class", "btn btn-danger focus");
+                $(this).html("取消");
+                $.ajax({
+                    url : '/program/code/view/'+id,
+                    type : "GET",
+                    dataType : "text",
+                    data : {id: id, type: 3},
+
+                    success: function(data){
+                        $(".collect-area").html(data);
+                        <!--TODO:-->
+                    },
+
+                    complete: function(){
+                    },
+
+                    error: function(){
+                        alert("Error Happened While Running the Code...");
+                    },
+                });
+            }
+        });
+    });
+{% endblock %}

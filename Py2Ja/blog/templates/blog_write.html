@@ -1,0 +1,164 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+
+{% block tilte %}
+Py2Ja
+{% endblock %}
+
+{% block extracss %}
+<link href="{% static 'css/blog_write.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block login %}
+{% if request.user.is_authenticated %}
+<a>{{ request.user.username }}</a>
+<a href="/user/home/{{ request.user.username }}">|  <span class="glyphicon glyphicon-home"></span> </a>
+<a href="javascript:void(0)" class="user-logout">|  logout</a>
+{% else %}
+{{ block.super }}
+{% endif %}
+{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="container">
+        <div class="row">
+            <div class="co2-md-2 col-sm-2 col-xs-2 col">
+            </div>
+            <div class="col-md-8 col-sm-8 col-xs-8 col blog-preview-area">
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-2 col">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-sm-2 col-xs-2">
+            </div>
+            <div class="col-md-8 col-sm-8 col-xs-8 blog-editor-area">
+                <!--<form id="blog-form" method="post" action="">{% csrf_token %}-->
+                    <div class="title-area">
+                        <input class="Title" name="inputTitle" placeholder="输入标题..."/>
+                    </div>
+                    <div class="brief-area">
+                        <textarea class="Brief" name="inputBrief" placeholder="输入简介..." rows="2"></textarea>
+                    </div>
+                    <div class="edit-area">
+                        <textarea name="inputBlog" style="height: 493px;"></textarea>
+                    </div>
+                    <div class="commit">
+                        <button class="btn btn-success submit-button">提交</button>
+                    </div>
+                <!--</form>-->
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-2">
+            </div>
+        </div>
+        <div class="row">
+            <ul>
+                <li style="display: inline-block; float: left; padding-left: 460px; padding-bottom: 20px;">
+                    <button class="btn preview-button">预览</button>
+                </li>
+                <li style="display: inline-block; float: left; padding-left: 100px; padding-bottom: 20px;">
+                    <button class="btn back-button">返回</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script_files %}
+<script src="/static/ckeditor/ckeditor.js"></script>
+<script src="/static/jquery/jquery.form.js"></script>
+{% endblock %}
+
+{% block script %}
+    $(document).ready(function(){
+
+        var ckeditor = CKEDITOR.replace('inputBlog', {
+            customConfig : '/static/ckeditor/blog.js',
+        });
+
+        $(".submit-button").click(function(){
+            function trim(str){
+                return str.replace(/(^\s*)|(\s*$)/g, "");
+            }
+            var Title = $(".Title").val();
+            var Brief = $(".Brief").val();
+            var Content = ckeditor.getData();
+            if (trim(Title) == "" || trim(Brief) == "" || trim(Content) == ""){
+                $.dialog({
+                    title: '用户操作',
+                    content: '输入不能为空！',
+                });
+            }
+            else {
+                // using Ajax POST in Django
+                function getCookie(name) {
+                    var cookieValue = null;
+                    if (document.cookie && document.cookie != '') {
+                        var cookies = document.cookie.split(';');
+                        for (var i = 0; i < cookies.length; i++) {
+                            var cookie = jQuery.trim(cookies[i]);
+                            // Does this cookie string begin with the name we want?
+                            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
+                var csrftoken = getCookie('csrftoken');
+                function csrfSafeMethod(method) {
+                    // these HTTP methods do not require CSRF protection
+                    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+                }
+                $.ajaxSetup({
+                    beforeSend: function(xhr, settings) {
+                        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                        }
+                    }
+                });
+
+                $.ajax({
+                    url : "/blog/write",
+                    type : "POST",
+                    dataType : "text",
+                    data : {inputTitle: Title, inputBrief: Brief, inputBlog: Content},
+
+                    success: function(data){
+                        $.dialog({
+                            title: '用户操作',
+                            content: data,
+                        });
+                    },
+
+                    complete: function(){
+                    },
+
+                    error: function(){
+                        alert("Error Happened While Running the Code...");
+                    },
+                });
+
+                setTimeout(function (){
+                    $(".Title").val("");
+                    $(".Brief").val("");
+                    ckeditor.setData();
+                }, 100);
+            }
+        });
+
+        $(".preview-button").click(function(){
+            $(".blog-editor-area").css("display", "none");
+            $(".blog-preview-area").css("display", "inline");
+            $(".blog-preview-area").html(ckeditor.getData());
+        });
+
+        $(".back-button").click(function(){
+            $(".blog-preview-area").css("display", "none");
+            $(".blog-editor-area").css("display", "inline");
+        });
+    });
+{% endblock %}

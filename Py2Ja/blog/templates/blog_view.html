@@ -1,0 +1,280 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+
+{% block tilte %}
+Py2Ja
+{% endblock %}
+
+{% block extracss %}
+<link href="{% static 'css/blog_view.css' %}" rel="stylesheet">
+<link href="{% static 'ckeditor/plugins/codesnippet/lib/highlight/styles/monokai.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block login %}
+{% if request.user.is_authenticated %}
+<a>{{ request.user.username }}</a>
+<a href="/user/home/{{ request.user.username }}">|  <span class="glyphicon glyphicon-home"></span> </a>
+<a href="javascript:void(0)" class="user-logout">|  logout</a>
+{% else %}
+{{ block.super }}
+{% endif %}
+{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1 col-sm-1 col-xs-1">
+                <div class="blog-like">
+                    <h4>推荐</h4>
+                    <h4 style="font-size: 28px; color: #008800;" class="rank-area">{{ blog.rank }}</h4>
+                    <div style="padding-bottom: 50px;"><button class="btn btn-success rank">帮顶</button></div>
+                </div>
+            </div>
+            <div class="col-md-10 col-sm-10 col-xs-10">
+                <div class="blog-info">
+                    <img src="/media/cropped_avatars/{{ blog.author }}-40.jpeg" />
+                    &nbsp;&nbsp;{{ blog.author }}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{blog.create_timestamp}}&nbsp;发表
+                </div>
+                <div class="blog-quote">
+                    <p>转载本博客文章必须遵循署名-非商业用途-保持一致的创作共用协议</p>
+                </div>
+                <div class="blog-title">{{ blog.title }}</div>
+                <div class="blog-content">
+                    {% autoescape off %}
+                        {{ blog.content }}
+                    {% endautoescape %}
+                </div>
+                <div class="blog-commit"></div>
+            </div>
+            <div class="col-md-1 col-sm-1 col-xs-1">
+                <div class="blog-like">
+                    <h4>关注</h4>
+                    <h4 style="font-size: 28px; color: #008800;" class="collect-area">{{ blog.collect }}</h4>
+                    {% if flag == "true" %}
+                    <div style="padding-bottom: 20px;"><button class="btn btn-danger collect">取消</button></div>
+                    {% else %}
+                    <div style="padding-bottom: 20px;"><button class="btn btn-success collect">收藏</button></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1 col-sm-1 col-xs-1">
+            </div>
+            <div class="col-md-10 col-sm-10 col-xs-10">
+                <h5 class="well" style="text-align: center">评论区</h5>
+                {% for commit in commits %}
+                <div class="commit-show-area">
+                    <div class="container">
+                        <div class="col-md-1 col-sm-1 col-xs-1" style="width: 70px;">
+                            <img src="/media/cropped_avatars/{{ commit.observer.username }}-40.jpeg" />
+                        </div>
+                        <div class="col-md-9 col-sm-9 col-xs-9">
+                            {% autoescape off %}
+                                {{ commit.content }}
+                            {% endautoescape %}
+                            <p>{{ commit.observer.username }}发表于{{ commit.create_timestamp }}<p>
+                            <p style="display: none;">{{ commit.id }}</p>
+                            <p><a href="javascript:void(0)" class="star-commit">好评</a>&nbsp;&nbsp;<a>{{ commit.star }}</a>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="reply-commit">回复</a></p>
+                        </div>
+                    </div>
+                </div>
+                <hr style="width: 700px; margin: 5px;">
+                {% endfor %}
+                <div class="commit-area" style="margin-top: 10px;">
+                    <textarea name="inputCommit" rows="8" cols="132" class="Commit"></textarea>
+                </div>
+                <div class="push-area" style="padding-top: 10px; padding-bottom:10px; padding-left: 890px;">
+                    <button class="btn btn-success push-button">提交</button>
+                </div>
+            </div>
+            <div class="col-md-1 col-sm-1 col-xs-1">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script_files %}
+<script src="/static/ckeditor/ckeditor.js"></script>
+<script src="/static/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+{% endblock %}
+
+{% block script %}
+    $(document).ready(function(){
+        hljs.initHighlightingOnLoad();
+
+        var ckeditor = CKEDITOR.replace('inputCommit', {
+            customConfig : '/static/ckeditor/commit.js',
+        });
+
+        $(".rank").click(function(){
+            var id = {{ blog.id }};
+            $.ajax({
+		        url : '/blog/view/'+id,
+                type : "GET",
+		        dataType : "text",
+		        data : {id: id, type: 1},
+
+                success: function(data){
+                    $(".rank-area").html(data);
+                },
+
+                complete: function(){
+                },
+
+                error: function(){
+                    alert("Error Happened While Running the Code...");
+                },
+		    });
+        });
+
+        $(".push-button").click(function(){
+            function trim(str){
+                return str.replace(/(^\s*)|(\s*$)/g, "");
+            }
+            var Content = ckeditor.getData();
+            if (Content == ""){
+                $.dialog({
+                    title: '用户操作',
+                    content: '输入不能为空！',
+                });
+            }
+            else {
+                var id = {{ blog.id }};
+
+                // using Ajax POST in Django
+                function getCookie(name) {
+                    var cookieValue = null;
+                    if (document.cookie && document.cookie != '') {
+                        var cookies = document.cookie.split(';');
+                        for (var i = 0; i < cookies.length; i++) {
+                            var cookie = jQuery.trim(cookies[i]);
+                            // Does this cookie string begin with the name we want?
+                            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
+                var csrftoken = getCookie('csrftoken');
+                function csrfSafeMethod(method) {
+                    // these HTTP methods do not require CSRF protection
+                    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+                }
+                $.ajaxSetup({
+                    beforeSend: function(xhr, settings) {
+                        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                        }
+                    }
+                });
+
+                $.ajax({
+                    url : '/blog/view/'+id,
+                    type : 'POST',
+                    dataType : "html",
+                    data : {content: Content, type: 2},
+
+                    success: function(DOM){
+                        $(".well").after(DOM);
+                        $.dialog({
+                            title: '用户操作',
+                            content: '谢谢您的评论',
+                        });
+                    },
+
+                    complete: function(){
+                    },
+
+                    error: function(){
+                        alert("Error Happened While Running the Code...");
+                    },
+                });
+
+                setTimeout(function (){
+                    ckeditor.setData();
+                }, 100);
+            }
+        });
+
+        $(".star-commit").click(function(){
+            var id = {{ blog.id }};
+            var commit_id = $(this).closest("p").prev().html();
+            var current_this = $(this)
+            $.ajax({
+		        url : '/blog/view/'+id,
+                type : 'GET',
+		        dataType : "text",
+		        data : {commit_id: commit_id, type: 3},
+
+                success: function(data){
+                    current_this.next().html(data);
+                },
+
+                complete: function(){
+                },
+
+                error: function(){
+                    alert("Error Happened While Running the Code...");
+                },
+		    });
+        });
+
+        $(".collect").click(function(){
+            id = {{ blog.id }};
+
+            if ({{ flag }} == true){
+                $(this).attr("class", "btn btn-success focus");
+                $(this).html("收藏");
+
+                $.ajax({
+                    url : '/blog/view/'+id,
+                    type : 'GET',
+                    dataType : "text",
+
+                    data : {id: id, type: 4},
+                    success: function(data){
+                        $(".collect-area").html(data);
+                         <!--TODO:-->
+                    },
+
+                    complete: function(){
+                    },
+
+                    error: function(){
+                        alert("Error Happened While Running the Code...");
+                    },
+                });
+            }
+            else {
+                $(this).attr("class", "btn btn-danger focus");
+                $(this).html("取消");
+
+                $.ajax({
+                    url : '/blog/view/'+id,
+                    type : 'GET',
+                    dataType : "text",
+                    data : {id: id, type: 5},
+
+                    success: function(data){
+                        $(".collect-area").html(data);
+                        <!--TODO:-->
+                    },
+
+                    complete: function(){
+                    },
+
+                    error: function(){
+                        alert("Error Happened While Running the Code...");
+                    },
+                });
+            }
+        });
+    });
+{% endblock %}

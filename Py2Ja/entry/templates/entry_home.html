@@ -1,0 +1,102 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+
+{% block tilte %}
+Py2Ja
+{% endblock %}
+
+{% block extracss %}
+<link href="{% static 'css/entry_home.css' %}" rel="stylesheet">
+<link href="{% static 'css/glide.core.css' %}" rel="stylesheet">
+<link href="{% static 'css/glide.theme.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block login %}
+{% if request.user.is_authenticated %}
+<a>{{ request.user.username }}</a>
+<a href="/user/home/{{ request.user.username }}">|  <span class="glyphicon glyphicon-home"></span> </a>
+<a href="javascript:void(0)" class="user-logout">|  logout</a>
+{% else %}
+{{ block.super }}
+{% endif %}
+{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1 col-sm-1 col-xs-1">
+            </div>
+            <div class="col-md-10 col-sm-10 col-xs-10">
+                <div id="Glide" class="glide">
+                    <div class="glide__arrows">
+                        <button class="glide__arrow prev" data-glide-dir="<">prev</button>
+                        <button class="glide__arrow next" data-glide-dir=">">next</button>
+                    </div>
+                    <div class="glide__wrapper">
+                        <ul class="glide__track">
+                            <li class="glide__slide"><img src="/static/images/slider/bg1.jpg" style="width: 100%;"></li>
+                            <li class="glide__slide"><img src="/static/images/slider/bg2.jpg" style="width: 100%;"></li>
+                            <li class="glide__slide"><img src="/static/images/slider/bg3.jpg" style="width: 100%;"></li>
+                        </ul>
+                    </div>
+                    <div class="glide__bullets"></div>
+                    <div class="text_display">
+                        <h1 class="text_display_h"></h1>
+                        <p class="text_display_p"></p>
+                        <a href="http://www.summychou.me/myself" target="_blank"><button class="btn btn-success text_display_button">Learn About Me...</button></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1 col-sm-1 col-xs-1">
+            </div>
+        </div>
+    </div>
+</div>
+<div id="tag_to_pop_up"
+    style="display: none;
+    width: 300px;
+    height: 80px;
+    background-color: #ff8c00;
+    border-radius: 10px;
+    color: #ffffff;">
+    <span class="glyphicon glyphicon-remove-circle tag-close"
+          style="padding-left: 280px; font-size: 20px;"></span>
+    <h4 style="text-align: center">初次相遇，请多关照</h4>
+</div>
+{% endblock %}
+
+{% block script_files %}
+<script src="/static/jquery/jquery.glide.min.js"></script>
+<script src="/static/javascript/user_login.js"></script>
+<script src="/static/jquery/jquery.bpopup.min.js"></script>
+{% endblock %}
+
+{% block script %}
+    $(document).ready(function(){
+        $("#Glide").glide({
+            type: "carousel",
+            autoheight: true,
+            autoplay: 3000,
+            paddings: -40,
+        });
+
+        $(function(){
+            obj_h = $.ajax({url:"/media/files/messages/display_h", async:false});
+            $(".text_display_h").html(obj_h.responseText);
+            obj_p = $.ajax({url:"/media/files/messages/display_p", async:false});
+            $(".text_display_p").html(obj_p.responseText);
+        });
+
+
+        setTimeout(function (){
+            if ({{ flag }} != true){
+                $('#tag_to_pop_up').bPopup({
+                    modalClose: false,
+                    opacity: 0.5,
+                    closeClass: "tag-close",
+                });
+            }
+        }, 3000);
+    });
+{% endblock %}

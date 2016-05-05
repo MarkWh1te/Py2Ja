@@ -1,0 +1,210 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+
+{% block tilte %}
+Py2Ja
+{% endblock %}
+
+{% block extracss %}
+<link href="{% static 'css/program_write_code.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block login %}
+{% if request.user.is_authenticated %}
+<a>{{ request.user.username }}</a>
+<a href="/user/home/{{ request.user.username }}">|  <span class="glyphicon glyphicon-home"></span> </a>
+<a href="javascript:void(0)" class="user-logout">|  logout</a>
+{% else %}
+{{ block.super }}
+{% endif %}
+{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="container">
+        <div class="row" style="height: 45px; text-align: center;">
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-sm-2 col-xs-2">
+            </div>
+            <div class="col-md-8 col-sm-8 col-xs-8 editor">
+                <!--<form id="code-form" method="post" action="" class="form-horizontal">{% csrf_token %}-->
+                    <textarea name="inputCode" class="Code code-area"
+                              placeholder="Write Down Your Code..." spellcheck="false"></textarea>
+                    <textarea class="result-area" placeholder="The Result:" spellcheck="false"></textarea>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label class="control-label">代码类型</label>
+                            <select name="inputType" class="Type">
+                                <option value ="C++">C++</option>
+                                <option value ="Java">Java</option>
+                                <option value="Python">Python</option>
+                                <option value="PHP">PHP</option>
+                                <option value="Javascript">JavaScript</option>
+                                <option value="SQL">SQL</option>
+                            </select>
+                            <label class="control-label">功能描述</label>
+                            <input name="inputDescription" class="Description" />
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button type="submit" class="btn btn-success commit">提交</button>
+                        </div>
+                    </div>
+                <!--</form>-->
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-2">
+                <div class="tag">
+                    <button class="save btn"><span class="glyphicon glyphicon-floppy-save"></span></button>
+                </div>
+                <div class="tag">
+                    <button class="run btn"><span class="glyphicon glyphicon-play"></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script_files %}
+{% endblock %}
+
+{% block script %}
+    $(document).ready(function(){
+        /*
+        CKEDITOR.replace('inputCode', {
+            customConfig : '/static/ckeditor/code.js',
+            toolbar : [['CodeSnippet']],
+        });
+        */
+
+        $(".run").click(function(){
+            var Code = $(".Code").val();
+            var Type = $(".Type").val();
+
+            if (Type == "C++"){URL="/program/code/run/cpp";}
+            else if (Type == "Java"){URL="/program/code/run/java";}
+            else if (Type == "Python"){URL="/program/code/run/python";}
+            else if (Type == "PHP"){URL="/program/code/run/php";}
+            else if (Type == "JavaScript"){URL="/program/code/run/javascript";}
+            else if (Type == "SQL"){URL="/program/code/run/sql";}
+
+            // using Ajax POST in Django
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            var csrftoken = getCookie('csrftoken');
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+
+            $.ajax({
+		        url : URL,
+                type : "POST",
+		        dataType : "text",
+		        data : {CodeSnippet: Code},
+
+                success: function(data){
+                    $(".result-area").html(data);
+                },
+
+                complete: function(){
+                },
+
+                error: function(){
+                    alert("Error Happened While Running the Code...");
+                },
+		    });
+        });
+
+        $(".commit").click(function(){
+            function trim(str){
+                return str.replace(/(^\s*)|(\s*$)/g, "");
+            }
+            var Type = $(".Type").val();
+            var Description = $(".Description").val();
+            var Code = $(".Code").val();
+            if (trim(Type) == "" || trim(Description) == "" || trim(Code) == "") {
+                $.dialog({
+                    title: '用户操作',
+                    content: '输入不能为空！',
+                });
+			}
+            else {
+                // using Ajax POST in Django
+                function getCookie(name) {
+                    var cookieValue = null;
+                    if (document.cookie && document.cookie != '') {
+                        var cookies = document.cookie.split(';');
+                        for (var i = 0; i < cookies.length; i++) {
+                            var cookie = jQuery.trim(cookies[i]);
+                            // Does this cookie string begin with the name we want?
+                            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
+                var csrftoken = getCookie('csrftoken');
+                function csrfSafeMethod(method) {
+                    // these HTTP methods do not require CSRF protection
+                    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+                }
+                $.ajaxSetup({
+                    beforeSend: function(xhr, settings) {
+                        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                        }
+                    }
+                });
+
+                $.ajax({
+                    url : '/program/code/write',
+                    type : "POST",
+                    dataType : "text",
+                    data : {inputType: Type, inputDescription: Description, inputCode: Code},
+
+                    success: function(data){
+                        $.dialog({
+                            title: '用户操作',
+                            content: data,
+                        });
+                    },
+
+                    complete: function(){
+                    },
+
+                    error: function(){
+                        alert("Error Happened While Running the Code...");
+                    },
+                });
+                setTimeout(function (){
+                    $(".code-area").val("");
+                    $(".result-area").val("");
+                    $(".Description").val("");
+                    $("option:first").attr("selected", "selected");
+                }, 100);
+            }
+        });
+    });
+{% endblock %}

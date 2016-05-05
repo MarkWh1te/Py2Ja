@@ -1,0 +1,39 @@
+<div class="container code-section">
+    <div class="col-md-1 col-sm-1 col-xs-1 gap-1">
+    {% if snippet.rank == 0 %}
+        <ul class="alert-danger"><li>{{ snippet.rank }}</li><li>点赞</li></ul>
+    {% else %}
+        <ul class="alert-success"><li>{{ snippet.rank }}</li><li>点赞</li></ul>
+    {% endif %}
+    </div>
+    <div class="col-md-1 col-sm-1 col-xs-1 gap-1">
+    {% if 1 %}
+        <ul class="alert-danger"><li>0</li><li>评论</li></ul>
+    {% else %}
+        <ul class="alert-success"><li>0</li><li>评论</li></ul>
+    {% endif %}
+    </div>
+    <div class="col-md-1 col-sm-1 col-xs-1 gap-1">
+    {% if snippet.trace == 0 %}
+        <ul class="alert-danger"><li>{{ snippet.trace }}</li><li>浏览</li></ul>
+    {% else %}
+        <ul class="alert-success"><li>{{ snippet.trace }}</li><li>浏览</li></ul>
+    {% endif %}
+    </div>
+    <div class="col-md-9 col-sm-9 col-xs-9">
+        {% if snippet.type == "C++" %}
+        <img src="/static/images/program/cpp.jpg" />
+        {% elif snippet.type == "Java" %}
+        <img src="/static/images/program/java.jpg" />
+        {% elif snippet.type == "Python" %}
+        <img src="/static/images/program/python.jpg" />
+        {% elif snippet.type == "PHP" %}
+        <img src="/static/images/program/php.jpg" />
+        {% elif snippet.type == "JavaScript" %}
+        <img src="/static/images/program/javascript.jpg" />
+        {% elif snippet.type == "SQL" %}
+        <img src="/static/images/program/sql.jpg" />
+        {% endif %}
+        <a href="/program/code/view/{{ snippet.id }}"><p>{{ snippet.description }}</p></a>
+    </div>
+</div>

@@ -1,0 +1,139 @@
+.main {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.tabs .horizontal {
+    margin: 0;
+    padding: 0;
+    height: 80px;
+    list-style: none;
+    border-bottom: 1px solid #f19000;
+}
+
+.tabs .horizontal li {
+    display: inline-block;
+    float: left;
+    min-width: 16.66%;
+    text-align: center;
+}
+
+.tabs .horizontal li:hover {
+    border-bottom: 3px solid #f1941c;
+}
+
+.tabs .horizontal li a {
+    line-height: 77px;
+    text-decoration: none;
+    font-size: 20px;
+    font-family: "Time New Roman"
+}
+
+.tabs .horizontal li a:hover {
+    color: #000000;
+}
+
+.tabs .tab-content {
+    height: 500px;
+    padding-top: 10px;
+}
+
+.tabs .tab-content .code-section {
+    margin: 0;
+    padding: 0;
+    padding-bottom: 10px;
+}
+
+.tabs .tab-content .code-section .gap-1 {
+    width: 55px;
+    margin: 0;
+    padding: 0;
+    padding-left: 10px;
+}
+
+.tabs .tab-content .code-section .ul {
+    margin: 0;
+    padding: 0;
+}
+
+.tabs .tab-content .code-section ul li {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.tabs .tab-content .code-section img {
+    width: 20px;
+    height: 20px;
+    float: left;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.tabs .tab-content .code-section a {
+    text-decoration: none;
+    font-size: 15px;
+    font-family: "Time New Roman";
+}
+
+.tabs .tab-content .code-section a:hover {
+    color: #000000;
+}
+
+.tabs .tab-content .code-section a p {
+    padding-top: 10px;
+    width: 480px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#ranking {
+    border-top: 1px solid #f1941c;
+    border-bottom: 1px solid #f1941c;
+    margin-top: 15px;
+    padding: 10px;
+}
+
+#ranking #ranking_title {
+    font-size: 17px;
+    font-family: "Time New Roman";
+    padding-bottom: 10px;
+}
+
+#ranking .box {
+    font-size: 14px;
+    font-family: "Time New Roman";
+    padding-bottom: 7px;
+}
+
+#ranking .box .gpa-1 {
+    margin: 0;
+    padding: 0;
+    padding-top: 8px;
+    width: 20px;
+}
+
+#ranking .box .gpa-2 {
+    margin: 0;
+    padding: 0;
+    width: 50px;
+}
+
+#ranking .box .gpa-3 {
+    margin: 0;
+    padding: 0;
+    padding-top: 8px;
+    width: 180px;
+}
+
+#ranking .box .gpa-4 {
+    margin: 0;
+    padding: 0;
+    padding-top: 8px;
+}
+
+#ranking .box img {
+    border-radius: 120px;
+}

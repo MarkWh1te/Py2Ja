@@ -1,0 +1,55 @@
+.main {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.blog-block {
+    margin: 0;
+    padding: 0;
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+.blog-section {
+    margin: 0;
+}
+
+.blog-section ul {
+    margin: 0;
+    padding: 0;
+}
+
+.blog-section ul li {
+    margin: 0;
+    padding: 0;
+}
+
+.blog-section .title a {
+    text-decoration: none;
+    font-size: 16px;
+    font-family: "Time New Roman";
+}
+
+.blog-section .brief p {
+    font-size: 14px;
+    font-family: "Time New Roman";
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 5px;
+}
+
+.blog-section .title a:hover {
+    color: #000000;
+}
+
+.blog-section .author {
+    font-family: "Time New Roman";
+}
+
+.blog-section .author img {
+    border-radius: 120px;
+    width: 20px;
+    height: 20px;
+}

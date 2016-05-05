@@ -1,0 +1,112 @@
+{% extends "base/base.html" %}
+{% load staticfiles %}
+
+{% block tilte %}
+Py2Ja
+{% endblock %}
+
+{% block extracss %}
+<link href="{% static 'css/knowledge_view.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block login %}
+{% if request.user.is_authenticated %}
+<a>{{ request.user.username }}</a>
+<a href="/user/home/{{ request.user.username }}">|  <span class="glyphicon glyphicon-home"></span> </a>
+<a href="javascript:void(0)" class="user-logout">|  logout</a>
+{% else %}
+{{ block.super }}
+{% endif %}
+{% endblock %}%}
+
+{% block main %}
+<div class="main">
+    <div class="container">
+        <div class="row">
+        </div>
+        <div class="row">
+            <div class="col-md-1 col-sm-1 col-xs-1">
+            </div>
+            <div class="col-md-10 col-sm-10 col-xs-10">
+                <a class="media" href="/media/files/pdfs/django.pdf"></a>
+            </div>
+            <div class="col-md-1 col-sm-1 col-xs-1">
+                <div class="tag">
+                    <a href="javascript:void(0)" class="tag-notes"><span class="glyphicon glyphicon-bookmark"></span></a>
+                </div>
+                <div class="tag">
+                    <a href="javascript:void(0)" class="tag-info"><span class="glyphicon glyphicon-book"></span></a>
+                </div>
+                <div class="tag">
+                    <a href="javascript:void(0)" class="tag-list"><span class="glyphicon glyphicon-list"></span></a>
+                </div>
+                <div class="tag">
+                    <a href="javascript:void(0)" class="tag-like"><span class="glyphicon glyphicon-heart"></span></a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+        </div>
+    </div>
+    {% include "knowledge_tags.html" %}
+</div>
+{% endblock %}
+
+{% block script_files %}
+<script src="/static/jquery/jquery.media.js"></script>
+<script src="/static/jquery/jquery.bpopup.min.js"></script>
+{% endblock %}
+
+{% block script %}
+    $(document).ready(function(){
+        $('a.media').media({width:940, height:1000});
+
+        $(".tag-notes").click(function(e){
+
+            // Prevents the default action to be triggered.
+            e.preventDefault();
+            // Triggering bPopup when click event is fired
+            $('#tag_notes_to_pop_up').bPopup({
+                modalClose: false,
+                opacity: 0,
+                closeClass: "login-close",
+            });
+
+            CKEDITOR.replace('inputNotes');
+        });
+
+        $(".tag-info").click(function(e){
+            // Prevents the default action to be triggered.
+            e.preventDefault();
+            // Triggering bPopup when click event is fired
+            $('#tag_info_to_pop_up').bPopup({
+                modalClose: false,
+                opacity: 0,
+                closeClass: "login-close",
+            });
+        });
+
+        $(".tag-list").click(function(e){
+            // Prevents the default action to be triggered.
+            e.preventDefault();
+            // Triggering bPopup when click event is fired
+            $('#tag_list_to_pop_up').bPopup();
+        });
+
+        $(".tag-like").click(function(e){
+            // Prevents the default action to be triggered.
+            e.preventDefault();
+            // Triggering bPopup when click event is fired
+            $('#tag_like_to_pop_up').bPopup({
+                modalClose: false,
+                opacity: 0,
+                follow: [false, false],
+                position: [1100, 338],
+                autoClose: 500,
+            });
+
+            // ajax goes here
+        });
+
+    });
+{% endblock %}
